@@ -180,20 +180,6 @@ public final class DolbyUtils {
         mDolbyAtmos.resetProfileSpecificSettings();
     }
 
-    public void setPreset(String preset) {
-        checkEffect();
-        int[] gains = Arrays.stream(preset.split(",")).mapToInt(Integer::parseInt).toArray();
-        dlog("setPreset: " + Arrays.toString(gains));
-        mDolbyAtmos.setDapParameter(DsParam.GEQ_BAND_GAINS, gains);
-    }
-
-    public String getPreset() {
-        int[] gains = mDolbyAtmos.getDapParameter(DsParam.GEQ_BAND_GAINS);
-        dlog("getPreset: " + Arrays.toString(gains));
-        String[] preset = Arrays.stream(gains).mapToObj(String::valueOf).toArray(String[]::new);
-        return String.join(",", preset);
-    }
-
     public void setHeadphoneVirtualizerEnabled(boolean enable) {
         checkEffect();
         dlog("setHeadphoneVirtualizerEnabled: " + enable);

@@ -41,7 +41,6 @@ public class DolbySettingsFragment extends PreferenceFragment implements
 
     public static final String PREF_ENABLE = "dolby_enable";
     public static final String PREF_PROFILE = "dolby_profile";
-    public static final String PREF_PRESET = "dolby_preset";
     public static final String PREF_VIRTUALIZER = "dolby_virtualizer";
     public static final String PREF_STEREO = "dolby_stereo";
     public static final String PREF_DIALOGUE = "dolby_dialogue";
@@ -50,10 +49,10 @@ public class DolbySettingsFragment extends PreferenceFragment implements
     public static final String PREF_RESET = "dolby_reset";
 
     private MainSwitchPreference mSwitchBar;
-    private ListPreference mProfilePref, mPresetPref, mStereoPref, mDialoguePref;
+    private ListPreference mProfilePref, mStereoPref, mDialoguePref;
     private SwitchPreferenceCompat mBassPref, mVirtualizerPref, mVolumePref;
     private Preference mResetPref;
-    private CharSequence[] mPresets, mDeValues, mSwValues;
+    private CharSequence[] mDeValues, mSwValues;
 
     private DolbyUtils mDolbyUtils;
     private AudioManager mAudioManager;
@@ -97,10 +96,6 @@ public class DolbySettingsFragment extends PreferenceFragment implements
             mCurrentProfile = -1;
             mProfilePref.setSummary(getActivity().getString(R.string.dolby_unknown));
         }
-
-        mPresetPref = (ListPreference) findPreference(PREF_PRESET);
-        mPresetPref.setOnPreferenceChangeListener(this);
-        mPresets = mPresetPref.getEntryValues();
 
         mVirtualizerPref = (SwitchPreferenceCompat) findPreference(PREF_VIRTUALIZER);
         mVirtualizerPref.setOnPreferenceChangeListener(this);
@@ -146,9 +141,6 @@ public class DolbySettingsFragment extends PreferenceFragment implements
                 mCurrentProfile = Integer.parseInt((newValue.toString()));
                 mDolbyUtils.setProfile(mCurrentProfile);
                 updateProfileSpecificPrefs();
-                return true;
-            case PREF_PRESET:
-                mDolbyUtils.setPreset(newValue.toString());
                 return true;
             case PREF_VIRTUALIZER:
                 if (mIsOnSpeaker)
@@ -202,7 +194,6 @@ public class DolbySettingsFragment extends PreferenceFragment implements
 
         final boolean enable = mDsOn && (mCurrentProfile != -1);
 
-        mPresetPref.setEnabled(enable);
         mVirtualizerPref.setEnabled(enable);
         mDialoguePref.setEnabled(enable);
         mVolumePref.setEnabled(enable);
@@ -212,14 +203,6 @@ public class DolbySettingsFragment extends PreferenceFragment implements
         mBassPref.setEnabled(enable && !mIsOnSpeaker);
 
         if (!enable) return;
-
-        final String preset = mDolbyUtils.getPreset();
-        if (Arrays.asList(mPresets).contains(preset)) {
-            mPresetPref.setSummary("%s");
-            mPresetPref.setValue(preset);
-        } else {
-            mPresetPref.setSummary(unknownRes);
-        }
 
         final String deValue = Integer.toString(mDolbyUtils.getDialogueEnhancerAmount());
         if (Arrays.asList(mDeValues).contains(deValue)) {

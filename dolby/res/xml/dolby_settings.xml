@@ -24,12 +24,6 @@
     <PreferenceCategory
         android:title="@string/dolby_category_settings">
 
-        <ListPreference
-            android:key="dolby_preset"
-            android:entries="@array/dolby_preset_entries"
-            android:entryValues="@array/dolby_preset_values"
-            android:title="@string/dolby_preset" />
-
         <SwitchPreferenceCompat
             android:key="dolby_virtualizer"
             android:title="@string/dolby_virtualizer" />
